@@ -1,0 +1,5 @@
+
+Um projeto de CRUD de uma agenda de contatos, desenvolvido para praticar os conceitos de Programação Orientada a Objetos
+Funcionalidades:Adicionar contatos, Listar todos, Buscar por nome/número, Editar, Deletar.
+Conceitos Aplicados: POO, Classes e Objetos, Manipulação de Listas e Dicionários, Estrutura de Menus Interativos.
+Como Executar: Para rodar o projeto, basta executar o arquivo agenda.py em um ambiente com Python 3 instalado.
