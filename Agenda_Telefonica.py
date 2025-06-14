@@ -1,5 +1,6 @@
 "Dividir as funcionalidades do código, Classes apenas retornam os metodos (são como os motores), Fazer inputs e prints com funções fora das classes"
 import os
+import json
 
 class Contato:
     def __init__(self, nome, numero):
@@ -11,10 +12,13 @@ class Contato:
         return f"Nome: {self.nome}\nNúmero: {self.numero}"
 
 class Agenda:
-    def __init__(self):
+    def __init__(self, nome_arquivo='contatos.json'):
 
         #Cria uma lista vazia da Agenda    
         self.contatos = []
+        #Carrega um json existente
+        self.nome_arquivo = nome_arquivo 
+        self.carregar_de_json()
 
     #retona true caso tenha algum contato ou false caso não tenha um contato
     def adicionar_contato(self, contato):
@@ -40,8 +44,6 @@ class Agenda:
         #hasattr(obj, atributo) Verifica se um objeto tem um determinado atributo.
         #getattr Obtém o valor de um atributo de um objeto. Se o atributo não existir, pode retornar um valor padrão (evitando erro).
 
-
-
         return encontrados
 
     
@@ -51,6 +53,34 @@ class Agenda:
             self.contatos.remove(contato_deletar)
             return True
         return False
+
+    def salvar_em_json(self):
+        salvamento_dos_dados = [{
+            "nome":contato.nome,
+            "numero":contato.numero
+        }
+            for contato in self.contatos
+        ]
+
+        with open(self.nome_arquivo, "w", encoding="utf-8") as arquivo_json:
+            json.dump(salvamento_dos_dados, arquivo_json, indent=4)
+
+        print(f"Agenda salva em {self.nome_arquivo} com sucesso!")
+
+    def carregar_de_json(self):
+
+        if os.path.exists(self.nome_arquivo):
+
+            try:
+                with open(self.nome_arquivo, "r", encoding="utf-8") as arquivo_json:
+                    dados_lido_do_arquivo = json.load(arquivo_json)
+
+                    for dados in dados_lido_do_arquivo:
+                        novo_contato = Contato(dados['nome'], dados['numero'] ) 
+                        self.contatos.append(novo_contato)
+            except json.JSONDecodeError:
+                pass
+
 
         
 
@@ -222,6 +252,8 @@ def main():
             executar_listagem(agenda)
 
         elif escolha == 0:
+            print("Salvando agenda antes de sair...")
+            agenda.salvar_em_json()
             print("Saindo da agenda...")
             break
         else:
